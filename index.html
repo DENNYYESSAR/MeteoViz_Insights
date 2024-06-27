@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeteoViz Weather App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MeteoViz Weather App</h1>
+        </header>
+
+        <div class="auth-views">
+            <!-- Login View -->
+            <div class="login-view">
+                <h2>Login</h2>
+                <form id="login-form">
+                    <input type="email" id="login-email" placeholder="Your email address" required>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                    <button type="button" id="forgot-password">Forgot Password</button>
+                    <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+                </form>
+            </div>
+
+            <!-- Sign Up View -->
+            <div class="sign-up-view">
+                <h2>Sign Up</h2>
+                <form id="sign-up-form">
+                    <input type="text" id="first-name" placeholder="Your first name" required>
+                    <input type="text" id="last-name" placeholder="Your last name" required>
+                    <input type="email" id="email" placeholder="Your email address" required>
+                    <input type="password" id="password" placeholder="Pick a password" required>
+                    <button type="submit">Sign Up for MeteoViz</button>
+                    <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+                </form>
+            </div>
+        </div>
+
+        <div class="weather-view">
+            <h2>Weather Data Visualization</h2>
+            <form id="search-form">
+                <input type="text" id="city-input" placeholder="Enter city or place" required>
+                <button type="submit">Search</button>
+            </form>
+            <div id="weather-data">
+                <!-- Weather data will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
