@@ -1,37 +1,49 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../db');
+const User = require('../models/userModel');
+require('dotenv').config();
 
-exports.signup = (req, res) => {
+exports.registerUser = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
+    
+    try {
+        let user = await User.findOne({ where: { email } });
+        if (user) {
+            return res.status(400).json({ msg: 'User already exists' });
+        }
 
-    bcrypt.hash(password, 10, (err, hashedPassword) => {
-        if (err) return res.status(500).send(err);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        const query = 'INSERT INTO users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)';
-        db.query(query, [firstName, lastName, email, hashedPassword], (err, result) => {
-            if (err) return res.status(500).send(err);
+        user = await User.create({ firstName, lastName, email, password: hashedPassword });
 
-            const token = jwt.sign({ userId: result.insertId }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            res.status(201).json({ token });
-        });
-    });
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.status(201).json({ token });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
 };
 
-exports.login = (req, res) => {
+exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
 
-    const query = 'SELECT * FROM users WHERE email = ?';
-    db.query(query, [email], (err, results) => {
-        if (err) return res.status(500).send(err);
-        if (results.length === 0) return res.status(401).json({ message: 'Auth failed' });
+    try {
+        const user = await User.findOne({ where: { email } });
+        if (!user) {
+            return res.status(400).json({ msg: 'Invalid credentials' });
+        }
 
-        bcrypt.compare(password, results[0].password, (err, result) => {
-            if (err) return res.status(500).send(err);
-            if (!result) return res.status(401).json({ message: 'Auth failed' });
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ msg: 'Invalid credentials' });
+        }
 
-            const token = jwt.sign({ userId: results[0].id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            res.status(200).json({ token });
-        });
-    });
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.json({ token });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
 };

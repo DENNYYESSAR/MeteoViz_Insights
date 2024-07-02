@@ -29,6 +29,12 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     document.querySelector('.weather-view').style.display = 'block';
 });
 
+// Handle back button
+document.getElementById('back-to-auth').addEventListener('click', function() {
+    document.querySelector('.weather-view').style.display = 'none';
+    document.querySelector('.auth-views').style.display = 'flex';
+});
+
 // Fetch weather data using OpenWeatherMap API
 function fetchWeatherData(city) {
     const apiKey = 'f603b9ad9663359fb15582782d576d35';
@@ -58,12 +64,12 @@ function renderWeatherData(data) {
     weatherDataContainer.innerHTML = `
         <div class="current-weather">
             <h3>Current Weather in ${data.name}, ${data.sys.country}</h3>
+            <p>Weather: ${data.weather[0].description}</p>
             <img src="${iconUrl}" alt="${data.weather[0].description}" class="weather-icon">
             <p>Temperature: ${data.main.temp}°C</p>
             <p>Humidity: ${data.main.humidity}%</p>
             <p>Wind Speed: ${data.wind.speed} m/s</p>
             <p>Pressure: ${data.main.pressure} hPa</p>
-            <p>Weather: ${data.weather[0].description}</p>
         </div>
     `;
 }
