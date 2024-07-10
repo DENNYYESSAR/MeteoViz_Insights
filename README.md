@@ -1,5 +1,6 @@
 MeteoViz Insights
-file:///home/dennis/Pictures/Screenshots/Screenshot%20from%202024-07-10%2023-27-15.png
+![project_landing_page](https://github.com/DENNYYESSAR/MeteoViz_Insights/assets/135635014/175d3ce4-f4ba-4671-8442-1552e0a7e61d)
+
 
 
 Introduction
